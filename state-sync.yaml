@@ -32,7 +32,8 @@ trigger:
     - 'off'
   to:
     - 'off'
-    - 'on'condition:
+    - 'on'
+condition:
   - condition: template
     value_template: '{{ states(entity_1) != states(entity_2) }}'
 action:
