@@ -1,0 +1,41 @@
+blueprint:
+  name: Synchronize brightness states between primary and secondary
+  description: Synchronize brightness states between primary and secondary
+  domain: automation
+  input:
+    entity_1:
+      name: Primary entity
+      selector:
+        entity: {}
+    entity_2:
+      name: Secondary entity
+      selector:
+        entity: {}
+  // source_url: https://gist.github.com/fireboy1919/997c80db37de30da76f67c5daeaba27b
+mode: restart
+max_exceeded: silent
+variables:
+  entity_1: !input entity_1
+  entity_2: !input entity_2
+trigger:
+- platform: state
+  entity_id: !input entity_1
+- platform: state
+  entity_id: !input entity_1
+  attribute: brightness
+  
+condition: []
+action:
+- choose:
+    - conditions:
+        condition: template
+        value_template: "{{ is_state(trigger.to_state.entity_id, 'on') }}"
+      sequence:
+        - service: light.turn_on
+          data:
+            brightness: '{{ state_attr(trigger.to_state.entity_id, "brightness") }}'
+            entity_id: '{% if trigger.from_state.entity_id == entity_1 %} {{ entity_2 }} {% else %} {{ entity_1 }} {% endif %}'
+  default:
+  - service: light.turn_off
+    target:
+      entity_id: '{% if trigger.from_state.entity_id == entity_1 %} {{ entity_2 }} {% else %} {{ entity_1 }} {% endif %}'
