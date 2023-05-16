@@ -11,7 +11,7 @@ blueprint:
       name: Secondary entity
       selector:
         entity: {}
-  // source_url: https://gist.github.com/fireboy1919/997c80db37de30da76f67c5daeaba27b
+  // source_url: https://github.com/utoc/haos-stuff/edit/main/sync-lum.yaml
 mode: restart
 max_exceeded: silent
 variables:
